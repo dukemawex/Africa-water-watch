@@ -1,0 +1,31 @@
+name: Data Refresh
+
+on:
+  schedule:
+    # Every 6 hours
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  refresh-satellite:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger satellite data refresh
+        run: |
+          curl -f -X POST "${{ secrets.BACKEND_URL }}/api/satellite/refresh" \
+            -H "X-Internal-Api-Key: ${{ secrets.INTERNAL_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            --max-time 120 \
+            || echo "Satellite refresh request failed — backend may be offline"
+
+  health-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check backend health
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${{ secrets.BACKEND_URL }}/health" || echo "000")
+          if [ "$STATUS" != "200" ]; then
+            echo "WARNING: Backend health check failed with status $STATUS"
+          else
+            echo "Backend is healthy"
+          fi
