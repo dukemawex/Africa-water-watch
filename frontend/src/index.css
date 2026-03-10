@@ -1,0 +1,50 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-bg: #0A1628;
+  --color-surface: #1A2E4A;
+  --color-accent: #00B4A6;
+  --color-warning: #F5A623;
+  --color-danger: #E8455A;
+  --color-text: #E8F4F3;
+  --color-muted: #8A9BB0;
+}
+
+body {
+  @apply bg-navy-950 text-[#E8F4F3] font-sans;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5 {
+  @apply font-heading;
+}
+
+.font-data {
+  font-family: 'DM Mono', monospace;
+}
+
+/* Leaflet overrides */
+.leaflet-container {
+  background: #0A1628 !important;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0D1E35; }
+::-webkit-scrollbar-thumb { background: #243A5C; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #00B4A6; }
+
+/* Status pulse animation */
+@keyframes status-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-status-pulse {
+  animation: status-pulse 2s ease-in-out infinite;
+}

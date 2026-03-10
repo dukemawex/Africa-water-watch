@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  db:
+    restart: always
+    volumes:
+      - pgdata_prod:/var/lib/postgresql/data
+
+  redis:
+    restart: always
+    volumes:
+      - redisdata_prod:/data
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: production
+    restart: always
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 2 --loop uvloop
+    volumes: []
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: production
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes: []
+
+volumes:
+  pgdata_prod:
+  redisdata_prod:
