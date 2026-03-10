@@ -12,6 +12,14 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
     REFRESH_TOKEN_EXPIRE_DAYS: int = 30
 
+    def validate_production_secrets(self) -> None:
+        """Warn loudly if default secret key is used in production."""
+        if self.APP_ENV == "production" and self.SECRET_KEY == "dev-secret-key-change-in-production":
+            raise ValueError(
+                "SECRET_KEY must be changed from the default value in production. "
+                "Generate one with: openssl rand -hex 32"
+            )
+
     OPENROUTER_API_KEY: str = ""
     OPENROUTER_PRIMARY_MODEL: str = "google/gemma-3-12b-it:free"
     OPENROUTER_FALLBACK_MODEL: str = "meta-llama/llama-3.1-8b-instruct:free"

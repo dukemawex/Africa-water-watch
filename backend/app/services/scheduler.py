@@ -89,8 +89,17 @@ async def _job_maintenance_check():
                     db.add(alert)
                     await db.flush()
 
-                    # Send SMS
-                    phone_numbers = [p.phone for p in [] if p.phone]  # community phones
+                    # Send SMS to users associated with the water point's country
+                    from app.models.user import User
+                    from sqlalchemy import select as sa_select
+                    users_result = await db.execute(
+                        sa_select(User).where(
+                            User.country == point.country,
+                            User.phone.isnot(None),
+                            User.is_active == True,
+                        )
+                    )
+                    phone_numbers = [u.phone for u in users_result.scalars().all() if u.phone]
                     if phone_numbers:
                         sent = await send_alert_sms(phone_numbers, message)
                         alert.sms_sent = sent

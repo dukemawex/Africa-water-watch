@@ -29,9 +29,14 @@ export default function Maintenance() {
 
   useEffect(() => {
     if (!selected) return
-    fetch(`/api/maintenance/${selected.water_point_id}/assessment`)
+    fetch(`/api/maintenance/${selected.water_point_id}/assessment`).catch(() => {})
     // Load service logs for history tab
     fetch(`/api/maintenance/treatment-plans/${selected.water_point_id}`)
+      .then((r) => r.json())
+      .then((plans) => {
+        if (Array.isArray(plans)) setLogs([])
+      })
+      .catch(() => {})
   }, [selected])
 
   const filtered = queue.filter((item) =>

@@ -9,6 +9,8 @@ on:
 jobs:
   lint-backend:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     defaults:
       run:
         working-directory: backend
@@ -25,13 +27,15 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Lint with ruff
-        run: pip install ruff && ruff check app/ || true
+        run: pip install ruff && ruff check app/ --select=E,W,F || true
 
       - name: Type check with mypy
         run: pip install mypy && mypy app/ --ignore-missing-imports || true
 
   test-backend:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     defaults:
       run:
         working-directory: backend
@@ -57,6 +61,8 @@ jobs:
 
   lint-frontend:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     defaults:
       run:
         working-directory: frontend
@@ -74,10 +80,12 @@ jobs:
         run: npm ci
 
       - name: Type check
-        run: npm run type-check || true
+        run: npm run type-check
 
   build-backend:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     needs: [lint-backend]
     steps:
       - uses: actions/checkout@v4
@@ -87,6 +95,8 @@ jobs:
 
   build-frontend:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     needs: [lint-frontend]
     steps:
       - uses: actions/checkout@v4

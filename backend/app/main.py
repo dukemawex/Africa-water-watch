@@ -36,6 +36,9 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# Validate production secrets on startup
+settings.validate_production_secrets()
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[settings.FRONTEND_URL, "http://localhost:5173", "http://localhost:3000"],

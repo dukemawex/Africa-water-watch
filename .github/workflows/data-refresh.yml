@@ -9,6 +9,7 @@ on:
 jobs:
   refresh-satellite:
     runs-on: ubuntu-latest
+    permissions: {}
     steps:
       - name: Trigger satellite data refresh
         run: |
@@ -20,6 +21,7 @@ jobs:
 
   health-check:
     runs-on: ubuntu-latest
+    permissions: {}
     steps:
       - name: Check backend health
         run: |
